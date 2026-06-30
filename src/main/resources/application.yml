@@ -1,7 +1,5 @@
 server:
-  port: 8087
-  servlet:
-    context-path: /api/v1
+  port: 8080
 
 springdoc:
   api-docs:
@@ -39,6 +37,8 @@ spring:
           issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8180/realms/atlas}
 
 management:
+  server:
+    port: 9090
   endpoints:
     web:
       exposure:
@@ -46,6 +46,8 @@ management:
   endpoint:
     health:
       show-details: when-authorized
+      probes:
+        enabled: true
 
 logging:
   level:

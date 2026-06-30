@@ -46,7 +46,7 @@ class ProfileControllerTest {
     void returns201WhenProfileCreated() throws Exception {
         when(profileService.bootstrap(any())).thenReturn(new BootstrapResult(sampleProfile(), true));
 
-        mockMvc.perform(post("/me/profile")
+        mockMvc.perform(post("/api/v1/me/profile")
                         .contentType("application/json")
                         .content("{}"))
                 .andExpect(status().isCreated())
@@ -57,7 +57,7 @@ class ProfileControllerTest {
     void returns200WhenProfileAlreadyExisted() throws Exception {
         when(profileService.bootstrap(any())).thenReturn(new BootstrapResult(sampleProfile(), false));
 
-        mockMvc.perform(post("/me/profile")
+        mockMvc.perform(post("/api/v1/me/profile")
                         .contentType("application/json")
                         .content("{}"))
                 .andExpect(status().isOk());
@@ -65,7 +65,7 @@ class ProfileControllerTest {
 
     @Test
     void returns400WhenPhoneNumberNotE164() throws Exception {
-        mockMvc.perform(post("/me/profile")
+        mockMvc.perform(post("/api/v1/me/profile")
                         .contentType("application/json")
                         .content("{\"phoneNumber\":\"not-a-phone\"}"))
                 .andExpect(status().isBadRequest())
