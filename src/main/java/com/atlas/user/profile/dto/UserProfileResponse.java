@@ -1,7 +1,6 @@
 package com.atlas.user.profile.dto;
 
 import com.atlas.user.profile.entity.ProfileStatus;
-
 import java.time.Instant;
 import java.util.UUID;
 
@@ -18,5 +17,4 @@ public record UserProfileResponse(
         String phoneNumber,
         ProfileStatus status,
         Instant createdAt,
-        Instant updatedAt
-) {}
+        Instant updatedAt) {}

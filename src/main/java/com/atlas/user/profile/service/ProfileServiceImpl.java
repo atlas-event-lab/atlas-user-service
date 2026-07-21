@@ -5,14 +5,13 @@ import com.atlas.user.profile.entity.ProfileStatus;
 import com.atlas.user.profile.entity.UserProfile;
 import com.atlas.user.profile.mapper.UserProfileMapper;
 import com.atlas.user.profile.repository.UserProfileRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -47,8 +46,7 @@ public class ProfileServiceImpl implements ProfileService {
         } catch (DataIntegrityViolationException race) {
             // Concurrent first call won the UNIQUE(keycloak_user_id) race: re-read and
             // return the winning row (200, no duplicate, no 500) — feature Idempotency & Concurrency.
-            UserProfile winner = repository.findByKeycloakUserId(keycloakUserId)
-                    .orElseThrow(() -> race);
+            UserProfile winner = repository.findByKeycloakUserId(keycloakUserId).orElseThrow(() -> race);
             return new BootstrapResult(mapper.toResponse(winner), false);
         }
     }

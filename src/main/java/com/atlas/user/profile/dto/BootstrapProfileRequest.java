@@ -9,10 +9,5 @@ import jakarta.validation.constraints.Size;
  * These fields are applied only when the profile is created (create-only seed).
  */
 public record BootstrapProfileRequest(
-
-        @Size(max = 100)
-        String displayName,
-
-        @Pattern(regexp = "^\\+[1-9]\\d{1,14}$", message = "must be E.164 format")
-        String phoneNumber
-) {}
+        @Size(max = 100) String displayName,
+        @Pattern(regexp = "^\\+[1-9]\\d{1,14}$", message = "must be E.164 format") String phoneNumber) {}

@@ -1,11 +1,19 @@
 package com.atlas.user.profile.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.atlas.user.profile.dto.BootstrapProfileRequest;
 import com.atlas.user.profile.dto.UserProfileResponse;
 import com.atlas.user.profile.entity.ProfileStatus;
 import com.atlas.user.profile.entity.UserProfile;
 import com.atlas.user.profile.mapper.UserProfileMapper;
 import com.atlas.user.profile.repository.UserProfileRepository;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,23 +26,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class ProfileServiceImplTest {
 
     private static final String SUB = "11111111-1111-1111-1111-111111111111";
     private static final String EMAIL = "user@atlas.local";
 
-    @Mock UserProfileRepository repository;
-    @Mock UserProfileMapper mapper;
+    @Mock
+    UserProfileRepository repository;
+
+    @Mock
+    UserProfileMapper mapper;
 
     @InjectMocks
     ProfileServiceImpl service;
@@ -59,8 +61,8 @@ class ProfileServiceImplTest {
     }
 
     private UserProfileResponse anyResponse() {
-        return new UserProfileResponse(UUID.randomUUID(), EMAIL, "Ada", "Lovelace",
-                null, null, ProfileStatus.ACTIVE, null, null);
+        return new UserProfileResponse(
+                UUID.randomUUID(), EMAIL, "Ada", "Lovelace", null, null, ProfileStatus.ACTIVE, null, null);
     }
 
     // ── AC-1: create on first call ────────────────────────────────────────────
@@ -132,7 +134,7 @@ class ProfileServiceImplTest {
         winner.setId(UUID.randomUUID());
         winner.setKeycloakUserId(SUB);
         when(repository.findByKeycloakUserId(SUB))
-                .thenReturn(Optional.empty())   // first read: not yet provisioned
+                .thenReturn(Optional.empty()) // first read: not yet provisioned
                 .thenReturn(Optional.of(winner)); // re-read after the race
         when(repository.saveAndFlush(any(UserProfile.class)))
                 .thenThrow(new DataIntegrityViolationException("uq_user_profiles_keycloak_user_id"));

@@ -1,10 +1,9 @@
 package com.atlas.user.profile.repository;
 
 import com.atlas.user.profile.entity.UserProfile;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserProfileRepository extends JpaRepository<UserProfile, UUID> {
 
